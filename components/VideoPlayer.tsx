@@ -19,37 +19,11 @@ export default function VideoPlayer({ videoSource }: Props) {
     const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
 
     return (
-        <View style={styles.contentContainer}>
-            <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
-            <View style={styles.controlsContainer}>
-                <Button
-                    title={isPlaying ? 'Pause' : 'Play'}
-                    onPress={() => {
-                        if (isPlaying) {
-                            player.pause();
-                        } else {
-                            player.play();
-                        }
-                    }}
-                />
-            </View>
+        <View className="relative">
+            <VideoView
+                style={{ width: 350, height: 275 }}
+                player={player} allowsFullscreen allowsPictureInPicture
+            />
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    contentContainer: {
-        flex: 1,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 50,
-    },
-    video: {
-        width: 350,
-        height: 275,
-    },
-    controlsContainer: {
-        padding: 10,
-    },
-});

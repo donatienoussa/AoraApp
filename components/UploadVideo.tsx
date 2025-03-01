@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
-import { View, Button } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { toast } from '@/lib/toast';
 import { uploadVideo } from '@/lib/cloudinary';
+import { icons } from '@/constants';
+import VideoPlayer from './VideoPlayer';
+import { VideoSource } from 'expo-video';
+import CustomButton from './CustomButton';
 
 interface Props {
+    video?: string,
     setVideo: (videoUrl?: string) => void;
+    videoSource: VideoSource    
 }
 
-const UploadVideo = ({ setVideo }: Props) => {
+const UploadVideo = ({ video, setVideo, videoSource }: Props) => {
     const [uploading, setUploading] = useState(false);
     const [mediaPermission, requestMediaPermission] = ImagePicker.useMediaLibraryPermissions();
 
@@ -42,11 +48,29 @@ const UploadVideo = ({ setVideo }: Props) => {
         }
     };
 
+
     return (
-        <View style={{ marginTop: 12 }}>
-            <Button title="Sélectionner une vidéo" onPress={pickVideo} disabled={uploading} />
-        </View>
-    );
+        video ? (
+            <View className="w-full  mb-4" >
+                <VideoPlayer videoSource={videoSource} />
+                <CustomButton
+                    title="Modifier la video" 
+                    handlePress={pickVideo}
+                    isLoading={uploading}
+                />
+            </View >
+        ) : (
+            <TouchableOpacity className="w-full mt-4 h-[250px] flex items-center justify-center border-2 
+         border-gray-400 rounded-lg" onPress={pickVideo}>
+                <View className="border-2 border-style-dotted border-gray-400 rounded-lg">
+                    <Image
+                        source={icons.upload}
+                        className="w-16 h-16" resizeMode="contain"
+                    />
+                </View>
+            </TouchableOpacity>
+        )
+    )
 };
 
 export default UploadVideo;
